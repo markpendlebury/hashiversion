@@ -11,11 +11,7 @@ jobs:
           name: Run Build
           command: |
             dotnet build
-      - publish:
-          working_directory: .
-          name: Run Publish
-          command: |
-            dotnet publish -c Release -p:PublishReadyToRun=false
+
 
      
   
