@@ -6,7 +6,7 @@ jobs:
       - image: mcr.microsoft.com/dotnet/sdk:6.0
     steps:
       - checkout
-      - Build:
+      - build:
           working_directory: .
           name: Run Build
           command: |
@@ -16,7 +16,7 @@ jobs:
       - image: mcr.microsoft.com/dotnet/sdk:6.0
     steps:
       - checkout
-      - Build:
+      - publish:
           working_directory: .
           name: Run Publish
           command: |
