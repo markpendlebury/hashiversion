@@ -9,8 +9,20 @@ jobs:
           working_directory: .
           name: Run Build
           command: |
-            dotnet publish -c Release -p:PublishReadyToRun=false
+            dotnet build
+  publish:
+      docker:
+        - image: mcr.microsoft.com/dotnet/sdk:6.0
+      steps:
+        - checkout
+        - run:
+            working_directory: .
+            name: Run Build
+            command: |
+              dotnet publish -c Release -p:PublishReadyToRun=false
+
 workflows:
   Deployment: # This is the name of the workflow, feel free to change it to better match your workflow.
     jobs:
       - build
+      - publish
