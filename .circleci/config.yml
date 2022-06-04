@@ -24,11 +24,17 @@ jobs:
           name: Run Build
           command: |
             dotnet build
+  publish:
+    docker: 
+      - image: mcr.microfot.com/dotnet/sdk:6.0
+    steps:
+      - checkout
       - Publish:
           working_directory: .
           name: Run Publish
           command: |
             dotnet publish -c Release -p:PublishReadyToRun=false
+      
   
 
 # Invoke jobs via workflows
@@ -38,3 +44,4 @@ workflows:
     # Inside the workflow, you define the jobs you want to run.
     jobs:
       - build
+      - publish
