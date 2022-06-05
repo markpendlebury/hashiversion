@@ -24,6 +24,9 @@ jobs:
               apt update && apt install zip -y
               dotnet publish -c Release -p:PublishReadyToRun=false
               zip -r hashiversion.zip . -i bin/Debug/Release/net6.0
+        - store_artifacts:
+            path: hashiversion.zip
+            destination: hashiversion.zip
 
 workflows:
   Deployment: # This is the name of the workflow, feel free to change it to better match your workflow.
