@@ -23,7 +23,7 @@ jobs:
             command: |
               apt update && apt install zip -y
               dotnet publish -c Release -p:PublishReadyToRun=false
-              cd /bin/Release/net6.0
+              cd bin/Release/net6.0
               zip -r hashiversion.zip .
               mv hashiversion.zip ../../../
         - store_artifacts:
