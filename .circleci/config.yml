@@ -25,7 +25,9 @@ jobs:
               dotnet publish -c Release -p:PublishReadyToRun=false
               cd bin/Release/net6.0
               zip -r hashiversion.zip *
-              aws --version
+        - aws-s3-copy:
+            bucket: s3://elesoft-hashiversion
+            path: hashiversion.zip
         - store_artifacts:
             path: bin/Release/net6.0/hashiversion.zip
             destination: hashiversion.zip
