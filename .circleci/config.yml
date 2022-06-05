@@ -23,7 +23,7 @@ jobs:
             command: |
               apt update && apt install zip -y
               dotnet publish -c Release -p:PublishReadyToRun=false
-              zip -r hashiversion.zip bin/Debug/Release/net6.0
+              zip -r hashiversion.zip . -i bin/Debug/Release/net6.0
 
 workflows:
   Deployment: # This is the name of the workflow, feel free to change it to better match your workflow.
