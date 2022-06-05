@@ -25,9 +25,10 @@ jobs:
               dotnet publish -c Release -p:PublishReadyToRun=false
               cd bin/Release/net6.0
               zip -r hashiversion.zip *
+              aws --version
         - store_artifacts:
             path: bin/Release/net6.0/hashiversion.zip
-            destination: bin/Release/net6.0/hashiversion.zip
+            destination: hashiversion.zip
 
 workflows:
   Deployment: # This is the name of the workflow, feel free to change it to better match your workflow.
