@@ -23,14 +23,14 @@ jobs:
             command: |
               apt update && apt install zip -y
               dotnet publish -c Release -p:PublishReadyToRun=false
-              cd bin/Release/net6.0
-              zip -r hashiversion.zip *
+              cd $APPLICATION_BUILD_PATH
+              zip -r $APPLICATION_NAME.zip *
         - aws-s3/copy:
-            from: bin/Release/net6.0/hashiversion.zip
-            to: s3://elesoft-hashiversion
+            from: $APPLICATION_BUILD_PATH/$APPLICATION_NAME.zip
+            to: $AWS_S3_BUCKET
         - store_artifacts:
-            path: bin/Release/net6.0/hashiversion.zip
-            destination: hashiversion.zip
+            path: $APPLICATION_BUILD_PATH/$APPLICATION_NAME.zip
+            destination: $APPLICATION_NAME.zip
 
 workflows:
   Deployment: # This is the name of the workflow, feel free to change it to better match your workflow.
