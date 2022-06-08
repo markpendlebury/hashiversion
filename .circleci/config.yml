@@ -28,7 +28,7 @@ jobs:
               zip -r $APPLICATION_NAME.zip *
         - aws-s3/copy:
             from: $APPLICATION_BUILD_PATH/$APPLICATION_NAME.zip
-            to: s3://elesoft-hashiversion-dev
+            to: $AWS_S3_DEV_BUCKET
         - store_artifacts:
             path: $APPLICATION_BUILD_PATH/$APPLICATION_NAME.zip
             destination: $APPLICATION_NAME.zip
@@ -47,7 +47,7 @@ jobs:
               zip -r $APPLICATION_NAME.zip *
         - aws-s3/copy:
             from: $APPLICATION_BUILD_PATH/$APPLICATION_NAME.zip
-            to: s3://elesoft-hashiversion
+            to: $AWS_S3_PROD_BUCKET
         - store_artifacts:
             path: $APPLICATION_BUILD_PATH/$APPLICATION_NAME.zip
             destination: $APPLICATION_NAME.zip
@@ -61,7 +61,7 @@ jobs:
           profile-name: example
       - run: 
           command: |
-            aws s3 cp s3://elesoft-hashiversion-dev/$APPLICATION_NAME.zip .
+            aws s3 cp $AWS_S3_DEV_BUCKET/$APPLICATION_NAME.zip .
             aws lambda update-function-code --function-name $APPLICATION_NAME-dev-lambda --zip-file fileb://$APPLICATION_NAME.zip
   deploy-prod:
     aws-cli-example:
@@ -72,7 +72,7 @@ jobs:
           profile-name: example
       - run: 
           command: |
-            aws s3 cp s3://elesoft-hashiversion/$APPLICATION_NAME.zip .
+            aws s3 cp $AWS_S3_PROD_BUCKET/$APPLICATION_NAME.zip .
             aws lambda update-function-code --function-name $APPLICATION_NAME-prod-lambda --zip-file fileb://$APPLICATION_NAME.zip
 
 workflows:
