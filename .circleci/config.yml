@@ -26,24 +26,26 @@ jobs:
               dotnet publish -c Release -p:PublishReadyToRun=false
               cd $APPLICATION_BUILD_PATH
               zip -r $APPLICATION_NAME.zip *
+              pwd
+              ls -la
         - aws-s3/copy:
             from: $APPLICATION_BUILD_PATH/$APPLICATION_NAME.zip
             to: $AWS_S3_BUCKET
         - store_artifacts:
             path: $APPLICATION_BUILD_PATH/$APPLICATION_NAME.zip
             destination: $APPLICATION_NAME.zip
-  deploy:
-    aws-cli-example:
-    executor: aws-cli/default
-    steps:
-      - checkout
-      - aws-cli/setup:
-          profile-name: example
-      - run: aws lambda update-function-code --function-name hashiversion-prod-lambda --zip-file fileb://$APPLICATION_BUILD_PATH/$APPLICATION_NAME.zip
+  # deploy:
+  #   aws-cli-example:
+  #   executor: aws-cli/default
+  #   steps:
+  #     - checkout
+  #     - aws-cli/setup:
+  #         profile-name: example
+  #     - run: aws lambda update-function-code --function-name hashiversion-prod-lambda --zip-file fileb://$APPLICATION_BUILD_PATH/$APPLICATION_NAME.zip
 
 workflows:
   Deployment: # This is the name of the workflow, feel free to change it to better match your workflow.
     jobs:
       - build
       - publish
-      - deploy
+      # - deploy
