@@ -73,7 +73,7 @@ public class VersionController : ControllerBase
             // Replace the conents of responseModel with
             // all instances that don't include alpha and 
             // beta in the name property
-            responseModel = responseModel.Where(r => !r.name.ToLower().Contains("alpha") && !r.name.ToLower().Contains("beta")).ToList();
+            responseModel = responseModel.Where(r => !r.name.ToLower().Contains("alpha") && !r.name.ToLower().Contains("beta") && !r.name.ToLower().Contains("dev") && !r.name.ToLower().Contains("rc")).ToList();
             logger.LogInformation("Returning the name of the first result");
 
             // Return the first (latest) name value (v#.###)
