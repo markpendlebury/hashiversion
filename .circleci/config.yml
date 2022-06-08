@@ -13,7 +13,7 @@ jobs:
           name: Run Build
           command: |
             dotnet build
-  publish:
+  publish-dev:
       docker:
         - image: mcr.microsoft.com/dotnet/sdk:6.0
       steps:
@@ -28,10 +28,30 @@ jobs:
               zip -r $APPLICATION_NAME.zip *
         - aws-s3/copy:
             from: $APPLICATION_BUILD_PATH/$APPLICATION_NAME.zip
-            to: $AWS_S3_BUCKET
+            to: s3://elesoft-hashiversion-dev
         - store_artifacts:
             path: $APPLICATION_BUILD_PATH/$APPLICATION_NAME.zip
             destination: $APPLICATION_NAME.zip
+  publish-prod:
+      docker:
+        - image: mcr.microsoft.com/dotnet/sdk:6.0
+      steps:
+        - checkout
+        - run:
+            working_directory: .
+            name: Run Build
+            command: |
+              apt update && apt install zip -y
+              dotnet publish -c Release -p:PublishReadyToRun=false
+              cd $APPLICATION_BUILD_PATH
+              zip -r $APPLICATION_NAME.zip *
+        - aws-s3/copy:
+            from: $APPLICATION_BUILD_PATH/$APPLICATION_NAME.zip
+            to: s3://elesoft-hashiversion
+        - store_artifacts:
+            path: $APPLICATION_BUILD_PATH/$APPLICATION_NAME.zip
+            destination: $APPLICATION_NAME.zip
+
   deploy-dev:
     aws-cli-example:
     executor: aws-cli/default
@@ -41,7 +61,7 @@ jobs:
           profile-name: example
       - run: 
           command: |
-            aws s3 cp $AWS_S3_BUCKET/$APPLICATION_NAME.zip .
+            aws s3 cp s3://elesoft-hashiversion-dev/$APPLICATION_NAME.zip .
             aws lambda update-function-code --function-name $APPLICATION_NAME-dev-lambda --zip-file fileb://$APPLICATION_NAME.zip
   deploy-prod:
     aws-cli-example:
@@ -52,18 +72,25 @@ jobs:
           profile-name: example
       - run: 
           command: |
-            aws s3 cp $AWS_S3_BUCKET/$APPLICATION_NAME.zip .
+            aws s3 cp s3://elesoft-hashiversion/$APPLICATION_NAME.zip .
             aws lambda update-function-code --function-name $APPLICATION_NAME-prod-lambda --zip-file fileb://$APPLICATION_NAME.zip
 
 workflows:
   Deployment: # This is the name of the workflow, feel free to change it to better match your workflow.
     jobs:
       - build
-      - publish
+      - publish-dev:
+          filters:
+            branches:
+              only: develop
       - deploy-dev:
           filters:
             branches:
               only: develop
+      - publish-prod:
+          filters:
+            branches:
+              only: main
       - deploy-prod:
           filters:
             branches:
