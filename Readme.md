@@ -1,5 +1,7 @@
 # Hashiversion
-  
+
+[![elesoft](https://circleci.com/gh/markpendlebury/hashiversion.svg?style=shield)](https://circleci.com/gh/markpendlebury/hashiversion)
+
 
 [Hashiversion](https://hashiversion.elesoft.co.uk) is a web api written in c# designed to provide easy endpoints to query the latest versions of software from [Hashicorp](https://hashicorp.com)
 
