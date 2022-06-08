@@ -26,7 +26,8 @@ jobs:
               dotnet publish -c Release -p:PublishReadyToRun=false
               cd $APPLICATION_BUILD_PATH
               zip -r $APPLICATION_NAME.zip *
-              pwd
+              mv $APPLICATION_NAME.zip $CIRCLE_WORKING_DIRECTORY
+              cd $CIRCLE_WORKING_DIRECTORY
               ls -la
         - aws-s3/copy:
             from: $APPLICATION_BUILD_PATH/$APPLICATION_NAME.zip
