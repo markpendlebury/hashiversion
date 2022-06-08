@@ -32,7 +32,7 @@ jobs:
         - store_artifacts:
             path: $APPLICATION_BUILD_PATH/$APPLICATION_NAME.zip
             destination: $APPLICATION_NAME.zip
-  deploy:
+  deploy-dev:
     aws-cli-example:
     executor: aws-cli/default
     steps:
@@ -42,11 +42,29 @@ jobs:
       - run: 
           command: |
             aws s3 cp $AWS_S3_BUCKET/$APPLICATION_NAME.zip .
-            aws lambda update-function-code --function-name hashiversion-prod-lambda --zip-file fileb://$APPLICATION_NAME.zip
+            aws lambda update-function-code --function-name $APPLICATION_NAME-dev-lambda --zip-file fileb://$APPLICATION_NAME.zip
+  deploy-prod:
+    aws-cli-example:
+    executor: aws-cli/default
+    steps:
+      - checkout
+      - aws-cli/setup:
+          profile-name: example
+      - run: 
+          command: |
+            aws s3 cp $AWS_S3_BUCKET/$APPLICATION_NAME.zip .
+            aws lambda update-function-code --function-name $APPLICATION_NAME-prod-lambda --zip-file fileb://$APPLICATION_NAME.zip
 
 workflows:
   Deployment: # This is the name of the workflow, feel free to change it to better match your workflow.
     jobs:
       - build
       - publish
-      - deploy
+      - deploy-dev:
+          filters:
+            branches:
+              only: develop
+      - deploy-prod:
+          filters:
+            branches:
+              only: main
