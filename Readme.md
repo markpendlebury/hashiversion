@@ -1,7 +1,7 @@
 # Hashiversion
   
 
-[Hashiversion](https://hashiversion.elesoft.dev) is a web api written in c# designed to provide easy endpoints to query the latest versions of software from [Hashicorp](https://hashicorp.com)
+[Hashiversion](https://hashiversion.elesoft.co.uk) is a web api written in c# designed to provide easy endpoints to query the latest versions of software from [Hashicorp](https://hashicorp.com)
 
 
 # How it works
