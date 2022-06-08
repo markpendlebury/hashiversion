@@ -10,9 +10,11 @@ It works by making a request to hashicorps github tags page, filtering out unwan
 # Usage
 
 Using curl, get the latest terraform version:
+
 `TERRAFORM_VERSION=$(curl -s https://hashiversion.elesoft.co.uk/terraform)`
 
 Using curl, get the latest packer version: 
+
 `PACKER_VERSION=$(curl -s https://hashiversion.elesoft.co.uk/packer)`
 
 
